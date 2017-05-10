@@ -6,10 +6,46 @@
     <link rel="stylesheet" href="./style.css">
 	</head>
 	<body>
-		<div id="titlebar">
-			<button id="save">Save</button>
+		<div id="left">
+			<div id="open-file" class="category">
+				OPEN FILES
+			</div>
+			<div id="folder" class="category">
+				FOLDERS
+			</div>
 		</div>
-		<div id="container"></div>
+		<div id="right">
+			<div id="titlebar">
+				<div class="title-item">
+					index.html
+					<div class="title-item-close">
+						x
+					</div>
+				</div>
+			</div>
+			<div id="container"></div>
+		</div>
+		<div id="footerbar">
+			<div id="footer-info"></div>
+			<div id="footer-setting"></div>
+			<div id="footer-language">
+				JAVA
+			</div>
+		</div>
+		<div id="langugage-setting">
+			<ul>
+				<li data-value="bat">Batch File</li>
+				<li data-value="c">C</li>
+				<li data-value="cpp">C++</li>
+				<li data-value="css">CSS</li>
+				<li data-value="html">HTML</li>
+				<li data-value="java">Java</li>
+				<li data-value="javascript">JavaScript</li>
+				<li data-value="php">Php</li>
+				<li data-value="python">Python</li>
+				<li data-value="shell">Shell</li>
+			</ul>
+		</div>
 	</body>
 
   <script>
