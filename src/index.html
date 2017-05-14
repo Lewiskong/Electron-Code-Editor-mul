@@ -8,20 +8,64 @@
 	<body>
 		<div id="left">
 			<div id="open-file" class="category">
-				OPEN FILES
+				<div class="category-titles">OPEN FILES</div>
+				<div id="open-file-items">
+					<div class="open-file-item active">
+						<span>index.html</span>
+						<div class="open-file-item-close">
+							x
+						</div>
+					</div>
+					<div class="open-file-item">
+						<span>test.html</span>
+						<div class="open-file-item-close">
+							x
+						</div>
+					</div>
+				</div>
 			</div>
 			<div id="folder" class="category">
-				FOLDERS
+				<div class="category-titles">FOLDERS</div>
+
+				<div id="folder-items">
+					<div class="item dir" data-url="/usr/local/lxeditor/">
+						<div class="folder-item-title">
+							<i class="fa fa-folder" aria-hidden="true"></i>
+							<span>lxeditor</span>
+						</div>
+						<div class="item dir">
+							<div class="folder-item-title">
+								<i class="fa fa-folder" aria-hidden="true"></i>
+								<span>node_modules</span>
+							</div>
+							<div class="item file">
+								<div class="folder-item-title">
+									<i class="fa fa-code" aria-hidden="true"></i>
+									<span>main.js</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
 		<div id="right">
 			<div id="titlebar">
-				<div class="title-item">
+				<div class="title-item item-active" data-url="/users/lewiskong/index.html">
 					index.html
 					<div class="title-item-close">
 						x
 					</div>
 				</div>
+
+				<div class="title-item" data-url="/users/lewiskong/test.html">
+					test.html
+					<div class="title-item-close">
+						x
+					</div>
+				</div>
+
 			</div>
 			<div id="container"></div>
 		</div>
@@ -41,12 +85,30 @@
 				<li data-value="html">HTML</li>
 				<li data-value="java">Java</li>
 				<li data-value="javascript">JavaScript</li>
-				<li data-value="php">Php</li>
+				<li data-value="php">PHP</li>
 				<li data-value="python">Python</li>
 				<li data-value="shell">Shell</li>
 			</ul>
 		</div>
 	</body>
+
+	<template class="template-item-dir">
+		<div class="item dir" data-url="{{url}}" data-open="false">
+			<div class="folder-item-title">
+				<i class="fa fa-folder" aria-hidden="true"></i>
+				<span>{{name}}</span>
+			</div>
+		</div>
+	</template>
+
+	<template class="template-item-file">
+		<div class="item file" data-url="{{url}}" data-open="false">
+			<div class="folder-item-title">
+				<i class="fa fa-code" aria-hidden="true"></i>
+				<span>{{name}}</span>
+			</div>
+		</div>
+	</template>
 
   <script>
     // You can also require other files to run in this process

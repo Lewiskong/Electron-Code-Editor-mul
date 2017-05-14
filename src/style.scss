@@ -1,3 +1,5 @@
+@import "../node_modules/font-awesome/css/font-awesome.min.css";
+
 $borderColor:#222;
 body {
     margin: 0;
@@ -11,17 +13,123 @@ body {
     height: 100vh;
     background: #1e1e1e;
     border-right: 1px solid $borderColor;
+    overflow:scroll;
+
+    $itemHeight:30px;
+    $itemPadding:30px;
+
     .category {
-        color: #c8d8dc;
-        font-family: arial;
-        font-size: 12px;
-        height: 40px;
-        line-height: 40px;
-        padding-left: 30px;
+        .category-titles{
+            color: #c8d8dc;
+            font-family: arial;
+            font-size: 12px;
+            height: 40px;
+            line-height: 40px;
+            padding-left: $itemPadding;
+        }
     }
-    #open-file {}
+    #open-file {
+
+    }
+    #open-file-items{
+        
+        
+        .open-file-item{
+            height:$itemHeight;
+            line-height:$itemHeight;
+            color:#606060;
+            font-size:12px;
+            padding-left:$itemPadding;
+            font-family:arial;
+            position:relative;
+
+            .open-file-item-close{
+                position:absolute;
+                left:15px;
+                top: 0;
+                color:#348392;
+                font-family:inherit;
+            }
+            
+            &:hover{
+                cursor:default;
+                color:white;
+            }
+
+            &.active{
+                color:#78cac3;
+                box-shadow: 3px 0 .01px -.2px #78cac3 inset;
+            }                
+        }
+    }
     #folder {
-        display: none;
+        #folder-items{
+            -webkit-user-select:none;
+            font-family:arial;
+            font-size:12px;
+            .item{
+                padding:10px 0 0 15px;
+            }
+            .closed{
+                display:none;
+            }
+            // 文件夹样式
+            .dir{
+                &[data-open="true"]{
+                    &>.folder-item-title{
+                        i,span{
+                            color:#80cbc4;
+                        }
+                    }
+                }
+                .folder-item-title{
+                    white-space: nowrap;
+                    i{
+                        color:#424242;
+                        font-size:18px;
+                    }
+                    span{
+                        padding-left:5px;
+                        color:#a8bcc2;
+                        vertical-align: top;
+                        line-height:18px;
+                    }
+
+                    &:hover{
+                        cursor:default;
+                        i{
+                            color:#80cbc4;
+                        }
+                    }
+                } 
+            }
+            // 文件样式
+            .file{
+                .folder-item-title{
+                    white-space: nowrap;
+                    i{
+                        color:#907050;
+                        font-size:14px;
+                    }
+                    span{
+                        color:#606060;
+                        padding-left:5px;
+                        vertical-align:top;
+                    }
+
+                    &:hover{
+                        cursor:default;
+                        i {
+                            color:#907050;
+                            filter:brightness(2);
+                        }
+                        span{
+                            color:white;
+                        }
+                    }
+                } 
+            }
+        }
     }
 }
 
@@ -37,6 +145,8 @@ body {
         width: 100%;
     }
     #titlebar {
+        $hoverColor: #80cbc4;
+
         width: 100%;
         height: 40px;
         background-color: #1e1e1e;
@@ -46,6 +156,7 @@ body {
         line-height: 40px;
         .title-item {
             max-width: 150px;
+            width:30%;
             background: #1e1e1e;
             color: #606060;
             padding-left: 20px;
@@ -53,22 +164,19 @@ body {
             font-size: 12px;
             transition: box-shadow .3s ease;
             position:relative;
+            float: left;
             &:hover {
-                $hoverColor: #80cbc4;
-                box-shadow: 0 -3px .1px -.1px $hoverColor inset;
+                box-shadow: 0 -2px .1px -.1px $hoverColor inset;
                 cursor: default;
                 background: #141414;
             }
-            // &::after{
-            //   content: 'x';
-            //   float:right;
-            //   padding-right: 15px;
-            //   font-size:12px;
-            //   line-height:40px;
-            // }
-            // &::after:hover{
-            //   color:white;
-            // }
+        }
+        .item-active{
+            box-shadow: 0 -2px .1px -.1px $hoverColor inset;
+            color:white;
+            .title-item-close{
+                color:$hoverColor;
+            }
         }
         .title-item-close {
             position:absolute;
@@ -78,9 +186,9 @@ body {
             color:#404040;
             top: 0;
             right: 10px;
-
+            
             &:hover{
-                color:#80cbc4;
+                color:$hoverColor;
             }
         }
     }
@@ -124,7 +232,7 @@ body {
 
 #save {
     background-color: #569CD6;
-    /* Green */
+    
     border: none;
     color: white;
     padding: 2px 10px;

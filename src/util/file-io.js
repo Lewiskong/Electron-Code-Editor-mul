@@ -117,6 +117,16 @@ let file = {
         ipcRenderer.send('quitter')
       }
     }
+  },
+
+  parseFile2Json(){
+    dialog.showOpenDialog({
+      title:'请选择打开的文件/文件夹',
+      buttonLabel:'Open',
+    },function(files){
+      console.log(files)
+      debugger;
+    })
   }
 }
 

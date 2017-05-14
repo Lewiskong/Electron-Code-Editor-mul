@@ -1,3 +1,4 @@
+@import url(../node_modules/font-awesome/css/font-awesome.min.css);
 body {
   margin: 0;
   padding: 0;
@@ -8,16 +9,75 @@ body {
   width: 200px;
   height: 100vh;
   background: #1e1e1e;
-  border-right: 1px solid #222; }
-  #left .category {
+  border-right: 1px solid #222;
+  overflow: scroll; }
+  #left .category .category-titles {
     color: #c8d8dc;
     font-family: arial;
     font-size: 12px;
     height: 40px;
     line-height: 40px;
     padding-left: 30px; }
-  #left #folder {
-    display: none; }
+  #left #open-file-items .open-file-item {
+    height: 30px;
+    line-height: 30px;
+    color: #606060;
+    font-size: 12px;
+    padding-left: 30px;
+    font-family: arial;
+    position: relative; }
+    #left #open-file-items .open-file-item .open-file-item-close {
+      position: absolute;
+      left: 15px;
+      top: 0;
+      color: #348392;
+      font-family: inherit; }
+    #left #open-file-items .open-file-item:hover {
+      cursor: default;
+      color: white; }
+    #left #open-file-items .open-file-item.active {
+      color: #78cac3;
+      box-shadow: 3px 0 .01px -.2px #78cac3 inset; }
+  #left #folder #folder-items {
+    -webkit-user-select: none;
+    font-family: arial;
+    font-size: 12px; }
+    #left #folder #folder-items .item {
+      padding: 10px 0 0 15px; }
+    #left #folder #folder-items .closed {
+      display: none; }
+    #left #folder #folder-items .dir[data-open="true"] > .folder-item-title i, #left #folder #folder-items .dir[data-open="true"] > .folder-item-title span {
+      color: #80cbc4; }
+    #left #folder #folder-items .dir .folder-item-title {
+      white-space: nowrap; }
+      #left #folder #folder-items .dir .folder-item-title i {
+        color: #424242;
+        font-size: 18px; }
+      #left #folder #folder-items .dir .folder-item-title span {
+        padding-left: 5px;
+        color: #a8bcc2;
+        vertical-align: top;
+        line-height: 18px; }
+      #left #folder #folder-items .dir .folder-item-title:hover {
+        cursor: default; }
+        #left #folder #folder-items .dir .folder-item-title:hover i {
+          color: #80cbc4; }
+    #left #folder #folder-items .file .folder-item-title {
+      white-space: nowrap; }
+      #left #folder #folder-items .file .folder-item-title i {
+        color: #907050;
+        font-size: 14px; }
+      #left #folder #folder-items .file .folder-item-title span {
+        color: #606060;
+        padding-left: 5px;
+        vertical-align: top; }
+      #left #folder #folder-items .file .folder-item-title:hover {
+        cursor: default; }
+        #left #folder #folder-items .file .folder-item-title:hover i {
+          color: #907050;
+          filter: brightness(2); }
+        #left #folder #folder-items .file .folder-item-title:hover span {
+          color: white; }
 
 #right {
   float: left;
@@ -38,17 +98,24 @@ body {
     line-height: 40px; }
     #right #titlebar .title-item {
       max-width: 150px;
+      width: 30%;
       background: #1e1e1e;
       color: #606060;
       padding-left: 20px;
       font-family: arial;
       font-size: 12px;
       transition: box-shadow .3s ease;
-      position: relative; }
+      position: relative;
+      float: left; }
       #right #titlebar .title-item:hover {
-        box-shadow: 0 -3px 0.1px -0.1px #80cbc4 inset;
+        box-shadow: 0 -2px 0.1px -0.1px #80cbc4 inset;
         cursor: default;
         background: #141414; }
+    #right #titlebar .item-active {
+      box-shadow: 0 -2px 0.1px -0.1px #80cbc4 inset;
+      color: white; }
+      #right #titlebar .item-active .title-item-close {
+        color: #80cbc4; }
     #right #titlebar .title-item-close {
       position: absolute;
       height: 40px;
@@ -89,7 +156,6 @@ body {
 
 #save {
   background-color: #569CD6;
-  /* Green */
   border: none;
   color: white;
   padding: 2px 10px;
