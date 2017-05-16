@@ -150,19 +150,20 @@ if (process.platform === 'darwin') {
         label: 'Quit',
         accelerator: 'Command+Q',
         click () {
-          if (file.isUnsaved() || file.hasChanged()) {
-            // prompt - save or just quit?
-            file.fileWarning('You have unsaved work.', 'Save', 'Quit', function () {
-              // OPTION A - save
-              file.save()
-            }, function () {
-              // OPTION B: Quit.
-              ipcRenderer.send('quitter')
-            })
-          } else {
-            // file is saved and no new work has been done:
-            ipcRenderer.send('quitter')
-          }
+          ipcRenderer.send('quitter')
+          // if (file.isUnsaved() || file.hasChanged()) {
+          //   // prompt - save or just quit?
+          //   file.fileWarning('You have unsaved work.', 'Save', 'Quit', function () {
+          //     // OPTION A - save
+          //     file.save()
+          //   }, function () {
+          //     // OPTION B: Quit.
+          //     ipcRenderer.send('quitter')
+          //   })
+          // } else {
+          //   // file is saved and no new work has been done:
+          //   ipcRenderer.send('quitter')
+          // }
         }
       }
     ]

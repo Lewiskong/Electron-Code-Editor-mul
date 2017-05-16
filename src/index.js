@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow,ipcMain } from 'electron';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -47,6 +47,12 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+ipcMain.on('quitter', (e) => {
+  debugger;
+  mainWindow.destroy(); // necessary to bypass the repeat-quit-check in the render process.
+  app.quit()
+})
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

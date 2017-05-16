@@ -4,6 +4,7 @@ const el=require('../util/el')
 const TitleItem = require('../bean/TitleItem')
 const fm=require('../util/filemanager')
 const fs=require('fs')
+const config=require('../config')
 
 let getById=(id)=>{
 	if (typeof id !== 'string') throw new Error(`wrong id ${id}`)
@@ -46,10 +47,10 @@ let initLangagePanel=(editor)=>{
 }
 
 let test=function(){
-	// dataX.__allTags.push(new TitleItem('/users/lewiskong/index.html','','javascript'))
-	// dataX.__allTags.push(new TitleItem('/users/lewiskong/test.html','','javascript'))
-	const url='/Users/nirvana/Documents/web/lxeditor/src'
+	const url='/Users/nirvana/Documents/web/lxeditor/src/bean'
+	const url2='/Users/nirvana/Documents/web/lxeditor/src/core'
 	let folderItem=fm.openFolder(url)
+	let folderItem2=fm.openFolder(url2)
 }
 
 let initTitlePanel=(editor)=>{
@@ -117,7 +118,8 @@ let initFolderPanel=(editor)=>{
 			let name=$(this).find('>.folder-item-title>span').text()
 			//just read the file
 			let content=fs.readFileSync(url).toString()
-			let language=getFileLanguage(name)
+			let language=config.getFileLanguage(name)
+			// let language=getFileLanguage(name)
 			let titleItem=new TitleItem(url,content,language,name)
 			dataX.__allTags.push(titleItem)
 
@@ -128,43 +130,43 @@ let initFolderPanel=(editor)=>{
 		let url=event.target.parentElement.dataset.url
 		dataX.removeItem(url)
 	})
-	function getFileLanguage(name){
-		//根据文件名解析文件语言
-		let index=name.lastIndexOf('.')
-		//不存在返回默认
-		if (index===-1) return ""
-		let suffix=name.substring(index+1)
-		let result=''
-		switch(suffix){
-			case 'js':
-			case 'json':
-				result='javascript';break;
-			case 'css':
-				result='css';break;
-			case 'c':
-				result='c';break;
-			case 'html':
-				result='html';break;
-			case 'java':
-				result='java';break;
-			case 'cpp':
-			case 'h':
-			case 'hpp':
-				result='cpp';break;
-			case 'py':
-				result='python';break;
-			case 'php':
-				result='php';break;
-			case 'sh':
-				result='shell';break;
-			case 'bat':
-				result='bat';break;
-			default:
-				result=null
-				// console.log(`file ${suffix} not support`)
-		}
-		return result
-	}
+	// function getFileLanguage(name){
+	// 	//根据文件名解析文件语言
+	// 	let index=name.lastIndexOf('.')
+	// 	//不存在返回默认
+	// 	if (index===-1) return ""
+	// 	let suffix=name.substring(index+1)
+	// 	let result=''
+	// 	switch(suffix){
+	// 		case 'js':
+	// 		case 'json':
+	// 			result='javascript';break;
+	// 		case 'css':
+	// 			result='css';break;
+	// 		case 'c':
+	// 			result='c';break;
+	// 		case 'html':
+	// 			result='html';break;
+	// 		case 'java':
+	// 			result='java';break;
+	// 		case 'cpp':
+	// 		case 'h':
+	// 		case 'hpp':
+	// 			result='cpp';break;
+	// 		case 'py':
+	// 			result='python';break;
+	// 		case 'php':
+	// 			result='php';break;
+	// 		case 'sh':
+	// 			result='shell';break;
+	// 		case 'bat':
+	// 			result='bat';break;
+	// 		default:
+	// 			result=null
+	// 			// console.log(`file ${suffix} not support`)
+	// 	}
+	// 	return result
+	// }
 }
 
 class EditorRenderer{

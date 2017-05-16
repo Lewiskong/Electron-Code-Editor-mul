@@ -10,7 +10,6 @@ const TitleItem = require('../bean/TitleItem')
 const FolderItem = require('../bean/FolderItem')
 const config=require('../config')
 const fs=require('fs')
-const fileUtil=require('./file-io')
 const $=require('jquery')
 
 /**
@@ -50,7 +49,7 @@ function observerPushFactory(obj,callback){
 class DataX{
 	constructor(){
 		// 当前active状态的tag
-		this.__currentTag={url:'',content:''}
+		this.__currentTag=null
 		observe(this,'__currentTag',setCurrentTag)
 		// 当前所使用的语言
 		this.__currentLang=''
@@ -116,8 +115,39 @@ class DataX{
 		if (this.__allTags.length>0) this.__currentTag=this.__allTags[0]
 		else {
 			el.folder.find('.active').removeClass('active')
-			this.__editor.setValue('')
+			this.__currentTag=null
+			this.__editor.setValue("")
 		}
+	}
+
+	addFolderItem(url){
+		let parentFolder=url.substring(0,url.lastIndexOf('/'))
+        let place=el.folder.find(`.item[data-url="${parentFolder}"]`)
+        let name=url.substring(url.lastIndexOf('/')+1)
+        if (place.length>0){
+        	//修改dom
+        	let $html=el.folderItemFile
+        	$html[0].dataset.url=url
+        	$html.find('span').text(name)
+        	place.append($html)
+        	place.find('>.item.closed').removeClass('closed')
+        	//修改this.__folders数据结构
+        	this.__folders.forEach((v,i,a)=>{
+        		var folderItem=new FolderItem(name,url,'file','closed',[])
+        		insertFolderItem(v,parentFolder,folderItem)
+        	})
+        }
+
+        function insertFolderItem(v,parent,folderItem){
+        	if (v.url===parent){
+        		v.son.push(folderItem)
+        		return 
+        	}else if (parent.startsWith(v)){
+        		v.son.forEach((v,i,a)=>{
+        			insertFolderItem(v,parent,folderItem)
+        		})
+        	}
+        }
 	}
 
 
@@ -125,6 +155,15 @@ class DataX{
 }
 
 function setCurrentTag(oldTag,newTag,data){
+	if (newTag===null){
+		el.activeTitleItem.removeClass('item-active')
+		el.openFileBar.find('.active').removeClass('active')
+		el.folder.find('.active').removeClass('active')
+		data.__editor.setValue('')
+		data.__currentLang='null'
+		return 
+	}
+
 	if (typeof newTag!=='object' || newTag.constructor!=TitleItem) {
 		throw new Error(`wrong parameter ${newTag}`)
 	}

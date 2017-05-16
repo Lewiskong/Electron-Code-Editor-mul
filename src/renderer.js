@@ -16,14 +16,10 @@ loader().then((monaco) => {
   dataX.__setEditor(editor)
   
   // const fileManager = new FileManager({ editor, monaco });
-
+  Menur.init()
   remote.getCurrentWindow().show();
   
   var render=new EditorRenderer(editor)
+
 });
-
-
-
-
-
 
