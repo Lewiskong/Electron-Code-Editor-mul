@@ -26,7 +26,8 @@ const config={
 		'javascript':'JavaScript',
 		'php':'PHP',
 		'python':'Python',
-		'shell':'Shell'
+		'shell':'Shell',
+		'null':'Plain Text'
 	}
 }
 

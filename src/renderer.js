@@ -8,7 +8,7 @@ import Menur from './core/menu'
 
 loader().then((monaco) => {
   var editor = monaco.editor.create(document.getElementById('container'), {
-    language: 'javascript',
+    // language: 'javascript',
     theme: 'vs-dark',
     automaticLayout: true,
   });

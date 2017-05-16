@@ -10,49 +10,20 @@
 			<div id="open-file" class="category">
 				<div class="category-titles">OPEN FILES</div>
 				<div id="open-file-items">
-					<div class="open-file-item active">
-						<span>index.html</span>
-						<div class="open-file-item-close">
-							x
-						</div>
-					</div>
-					<div class="open-file-item">
-						<span>test.html</span>
-						<div class="open-file-item-close">
-							x
-						</div>
-					</div>
 				</div>
 			</div>
 			<div id="folder" class="category">
 				<div class="category-titles">FOLDERS</div>
 
 				<div id="folder-items">
-					<div class="item dir" data-url="/usr/local/lxeditor/">
-						<div class="folder-item-title">
-							<i class="fa fa-folder" aria-hidden="true"></i>
-							<span>lxeditor</span>
-						</div>
-						<div class="item dir">
-							<div class="folder-item-title">
-								<i class="fa fa-folder" aria-hidden="true"></i>
-								<span>node_modules</span>
-							</div>
-							<div class="item file">
-								<div class="folder-item-title">
-									<i class="fa fa-code" aria-hidden="true"></i>
-									<span>main.js</span>
-								</div>
-							</div>
-						</div>
-					</div>
+				
 				</div>
 
 			</div>
 		</div>
 		<div id="right">
 			<div id="titlebar">
-				<div class="title-item item-active" data-url="/users/lewiskong/index.html">
+				<!-- <div class="title-item item-active" data-url="/users/lewiskong/index.html">
 					index.html
 					<div class="title-item-close">
 						x
@@ -64,7 +35,7 @@
 					<div class="title-item-close">
 						x
 					</div>
-				</div>
+				</div> -->
 
 			</div>
 			<div id="container"></div>
@@ -73,7 +44,7 @@
 			<div id="footer-info"></div>
 			<div id="footer-setting"></div>
 			<div id="footer-language">
-				JAVA
+				Plain Text
 			</div>
 		</div>
 		<div id="langugage-setting">
@@ -88,6 +59,7 @@
 				<li data-value="php">PHP</li>
 				<li data-value="python">Python</li>
 				<li data-value="shell">Shell</li>
+				<li data-value="null">Plain Text</li>
 			</ul>
 		</div>
 	</body>
@@ -106,6 +78,24 @@
 			<div class="folder-item-title">
 				<i class="fa fa-code" aria-hidden="true"></i>
 				<span>{{name}}</span>
+			</div>
+		</div>
+	</template>
+
+	<template class="template-title-file" >
+		<div class="title-item item-active" data-url="{{url}}">
+			<span>{{name}}</span>
+			<div class="title-item-close">
+				x
+			</div>
+		</div>
+	</template>
+
+	<template class="template-open-file">
+		<div class="open-file-item" data-url="{{url}}">
+			<span>{{name}}</span>
+			<div class="open-file-item-close">
+				x
 			</div>
 		</div>
 	</template>

@@ -7,7 +7,7 @@ body {
 #left {
   float: left;
   width: 200px;
-  height: 100vh;
+  height: calc(100vh - 30px);
   background: #1e1e1e;
   border-right: 1px solid #222;
   overflow: scroll; }
@@ -78,6 +78,8 @@ body {
           filter: brightness(2); }
         #left #folder #folder-items .file .folder-item-title:hover span {
           color: white; }
+    #left #folder #folder-items .file.active > div > span {
+      color: #7db99e !important; }
 
 #right {
   float: left;

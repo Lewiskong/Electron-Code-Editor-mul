@@ -11,6 +11,7 @@ const FolderItem = require('../bean/FolderItem')
 const config=require('../config')
 const fs=require('fs')
 const fileUtil=require('./file-io')
+const $=require('jquery')
 
 /**
  * [observe description]	a easy hijack function to realize MVVM
@@ -34,6 +35,18 @@ function observe(obj,key,callback){
 	})
 }
 
+function observerPushFactory(obj,callback){
+	const __push=Array.prototype.push
+	return function(){
+		if (arguments.length!==1 || !arguments[0] || typeof arguments[0]!=='object' || arguments[0].constructor!==obj){
+			return __push.apply(this,arguments)
+		}
+		let item=arguments[0]
+		callback(item)
+		return __push.apply(this,arguments) 
+	}
+}
+
 class DataX{
 	constructor(){
 		// 当前active状态的tag
@@ -44,21 +57,32 @@ class DataX{
 		observe(this,'__currentLang',setCurrentLang)
 		// 所有处于打开状态的tag
 		this.__allTags=[]
-		observe(this,'__allTags',setAllTags)
+		// 劫持tags的push函数
+		this.__allTags.push=observerPushFactory(TitleItem,pushTitleItem)
+		// this.__allTags.push=function(){
+		// 	if (arguments.length!==1 || !arguments[0] || typeof arguments[0]!=='object' || arguments[0].constructor!==TitleItem){
+		// 		return __push.apply(this,arguments)
+		// 	}
+		// 	let titleItem=arguments[0]
+		// 	pushTitleItem(titleItem)
+		// 	return __push.apply(this,arguments) 
+		// }
+		// observe(this,'__allTags',setAllTags)
+
 		// 目录树结构，内部为FolderItem
 		this.__folders=[]
 
-		const __push=Array.prototype.push
 		//劫持folders的push函数
-		this.__folders.push=function(){
-			if (arguments.length!==1 || !arguments[0] || typeof arguments[0]!=='object' || arguments[0].constructor!==FolderItem){
-				return __push.apply(this,arguments)
-			}
-			let folderItem=arguments[0]
-			pushFolderItem(folderItem)
+		// this.__folders.push=function(){
+		// 	if (arguments.length!==1 || !arguments[0] || typeof arguments[0]!=='object' || arguments[0].constructor!==FolderItem){
+		// 		return __push.apply(this,arguments)
+		// 	}
+		// 	let folderItem=arguments[0]
+		// 	pushFolderItem(folderItem)
 			
-			return __push.apply(this,arguments) 
-		}
+		// 	return __push.apply(this,arguments) 
+		// }
+		this.__folders.push=observerPushFactory(FolderItem,pushFolderItem)
 
 		// var folder=[{
 		// 	name:'lxeditor',
@@ -75,49 +99,76 @@ class DataX{
 	findItem(url){
 		let item=this.__allTags.filter(function(v){
 			return v.url===url
-		})[0]
-		return item
+		})
+		return item.length==1?item[0]:null
+	}
+
+	removeItem(url){
+		if (typeof url !== 'string') return ;
+		for (var index=0;index<this.__allTags.length;index++){
+			let v=this.__allTags[index]
+			if (v.url===url){
+				this.__allTags.splice(index,1)
+				$(`.title-item[data-url='${url}']`).remove()
+				$(`.open-file-item[data-url='${url}']`).remove()
+			}
+		}
+		if (this.__allTags.length>0) this.__currentTag=this.__allTags[0]
+		else {
+			el.folder.find('.active').removeClass('active')
+			this.__editor.setValue('')
+		}
 	}
 
 
 
 }
 
-function setCurrentTag(oldTag,newTag){
-	if (typeof newTag!=='object' || newTag.constructor!=TitleItem) throw new Error(`wrong parameter ${newTag}`)
+function setCurrentTag(oldTag,newTag,data){
+	if (typeof newTag!=='object' || newTag.constructor!=TitleItem) {
+		throw new Error(`wrong parameter ${newTag}`)
+	}
 	//去除之前高亮
 	el.activeTitleItem.removeClass('item-active')
 	el.titleItems.filter((index,value)=>{
 			return value.dataset.url==newTag.url
 		})
 		.addClass('item-active')
-}
+	data.__editor.setValue(newTag.content)
 
-function setAllTags(oldTags,newTags){
+	//修改左边的OPEN_FILES
+	el.openFileBar.find('.active').removeClass('active')
+	el.openFileBar.find(`.open-file-item[data-url="${newTag.url}"]`).addClass('active')
+	//修改Folder栏高亮
+	el.folder.find('.active').removeClass('active')
+	el.folder.find(`[data-url="${newTag.url}"]`).addClass('active')
+
+	data.__currentLang=newTag.language
 
 }
 
 function setCurrentLang(oldLang,newLang,data){
-	if (!newLang) return ;
-	if (typeof newLang!=='string') throw new Error(`wrong parameter ${newLang}`)
+	if (typeof newLang!=='string' && newLang!==null) throw new Error(`wrong parameter ${newLang}`)
 	//改变语言显示
-	el.languageText.text(config.language[newLang])
+	el.languageText.text(config.language[newLang===null?'null':newLang])
 	//更改编辑器显示样式
-	// debugger;
-	// let content=data.__editor.getValue()
-	let content=data.__currentContent
-	data.__editor.dispose()
-	data.__editor= monaco.editor.create(document.getElementById('container'), {
-	    language: newLang,
-	    theme: 'vs-dark',
-	    automaticLayout: true,
-	});
-	data.__editor.setValue(content)
+	monaco.editor.setModelLanguage(data.__editor.getModel(),newLang)
+}
+
+function pushTitleItem(titleItem){
+	// 构建标题树
+	let item=el.titleItem
+	item[0].dataset.url=titleItem.url
+	item.find('>span').text(titleItem.name)
+	el.titlebar.append(item)
+	// 构建openFile树
+	let openItem=el.openFileItem
+	openItem[0].dataset.url=titleItem.url
+	openItem.find('>span').text(titleItem.name)
+	el.openFileBar.append(openItem)
 }
 
 function pushFolderItem(folderItem){
-	// TODO
-	// 构建目录树
 	let $html=folder2dom(folderItem)
 	el.folder.append($html)
 }

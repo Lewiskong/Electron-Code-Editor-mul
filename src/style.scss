@@ -10,7 +10,7 @@ body {
 #left {
     float: left;
     width: 200px;
-    height: 100vh;
+    height: calc(100vh - 30px);
     background: #1e1e1e;
     border-right: 1px solid $borderColor;
     overflow:scroll;
@@ -128,6 +128,11 @@ body {
                         }
                     }
                 } 
+                &.active{
+                    &>div>span {
+                        color:#7db99e !important;
+                    }
+                }
             }
         }
     }

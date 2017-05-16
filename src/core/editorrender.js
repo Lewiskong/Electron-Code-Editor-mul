@@ -3,6 +3,7 @@ const dataX=require('../util/datax')
 const el=require('../util/el')
 const TitleItem = require('../bean/TitleItem')
 const fm=require('../util/filemanager')
+const fs=require('fs')
 
 let getById=(id)=>{
 	if (typeof id !== 'string') throw new Error(`wrong id ${id}`)
@@ -23,6 +24,8 @@ let initLangagePanel=(editor)=>{
 	//语言选择响应事件
 	el.languageSettingItems.click(event=>{
 		let value=event.target.dataset.value
+		//plain text 处理
+		if (!value || value==='null') value=null
 
 		dataX.__currentLang=value
 
@@ -43,29 +46,44 @@ let initLangagePanel=(editor)=>{
 }
 
 let test=function(){
-	dataX.__allTags.push(new TitleItem('/users/lewiskong/index.html','','javascript'))
-	dataX.__allTags.push(new TitleItem('/users/lewiskong/test.html','','javascript'))
-	const url='/Users/nirvana/Documents/web/lxeditor/'
+	// dataX.__allTags.push(new TitleItem('/users/lewiskong/index.html','','javascript'))
+	// dataX.__allTags.push(new TitleItem('/users/lewiskong/test.html','','javascript'))
+	const url='/Users/nirvana/Documents/web/lxeditor/src'
 	let folderItem=fm.openFolder(url)
 }
 
 let initTitlePanel=(editor)=>{
 	test()
 	//标题title-item响应事件
-	el.titleItems.click(event=>{
+	$(document).on('click','.title-item',event=>{
+		let url
+		if (event.target.classList.contains('title-item-close')){
+			// X的响应事件
+			url=event.target.parentElement.dataset.url
+			dataX.removeItem(url)
+			return ;
+		}else{
+
+			if (event.target.classList.contains('title-item')){
+				url=event.target.dataset.url
+			}else{
+				url=event.target.parentElement.dataset.url
+			}
+		}
+
 		let content=dataX.__editor.getValue()
-		let url=event.target.dataset.url
 
 		dataX.__currentTag.content=content
 		dataX.__currentTag.language=dataX.__currentLang
+
+		
+
 		var result=dataX.findItem(url)
 
-		// debugger;
-
 		dataX.__currentTag=result
-		dataX.__editor.setValue(result.content)
-		dataX.__currentContent=result.content
-		dataX.__currentLang=result.language
+		// dataX.__editor.setValue(result.content)
+		// dataX.__currentContent=result.content
+		// dataX.__currentLang=result.language
 	})
 }
 
@@ -87,8 +105,66 @@ let initFolderPanel=(editor)=>{
 		event.stopPropagation()
 		//TODO 
 		//如果是文件，执行打开操作处理
-		debugger;
+		if (this.classList.contains('file')){
+			//如果不存在 则新增
+			let url=this.dataset.url
+			let item=dataX.findItem(url)
+			if (item) {
+				dataX.__currentTag=item;
+				return ;
+			}
+
+			let name=$(this).find('>.folder-item-title>span').text()
+			//just read the file
+			let content=fs.readFileSync(url).toString()
+			let language=getFileLanguage(name)
+			let titleItem=new TitleItem(url,content,language,name)
+			dataX.__allTags.push(titleItem)
+
+			dataX.__currentTag=titleItem
+		}
 	})
+	$(document).on('click','.open-file-item-close',function(event){
+		let url=event.target.parentElement.dataset.url
+		dataX.removeItem(url)
+	})
+	function getFileLanguage(name){
+		//根据文件名解析文件语言
+		let index=name.lastIndexOf('.')
+		//不存在返回默认
+		if (index===-1) return ""
+		let suffix=name.substring(index+1)
+		let result=''
+		switch(suffix){
+			case 'js':
+			case 'json':
+				result='javascript';break;
+			case 'css':
+				result='css';break;
+			case 'c':
+				result='c';break;
+			case 'html':
+				result='html';break;
+			case 'java':
+				result='java';break;
+			case 'cpp':
+			case 'h':
+			case 'hpp':
+				result='cpp';break;
+			case 'py':
+				result='python';break;
+			case 'php':
+				result='php';break;
+			case 'sh':
+				result='shell';break;
+			case 'bat':
+				result='bat';break;
+			default:
+				result=null
+				// console.log(`file ${suffix} not support`)
+		}
+		return result
+	}
 }
 
 class EditorRenderer{
