@@ -47,10 +47,12 @@ let initLangagePanel=(editor)=>{
 }
 
 let test=function(){
-	const url='/Users/nirvana/Documents/web/lxeditor/src/bean'
-	const url2='/Users/nirvana/Documents/web/lxeditor/src/core'
+	// const url='/Users/nirvana/Documents/web/lxeditor/src/bean'
+	// const url2='/Users/nirvana/Documents/web/lxeditor/src/core'
+	// let folderItem=fm.openFolder(url)
+	// let folderItem2=fm.openFolder(url2)
+	const url='/Users/nirvana/Documents/web/Webpack-master/'
 	let folderItem=fm.openFolder(url)
-	let folderItem2=fm.openFolder(url2)
 }
 
 let initTitlePanel=(editor)=>{
@@ -129,6 +131,14 @@ let initFolderPanel=(editor)=>{
 	$(document).on('click','.open-file-item-close',function(event){
 		let url=event.target.parentElement.dataset.url
 		dataX.removeItem(url)
+	})
+	$(document).on('click','.open-file-item',function(event){
+		let target=event.target
+		let url
+		if (target.classList.contains('open-file-item')) url=target.dataset.url
+		else url=event.target.parentElement.dataset.url
+		let item=dataX.findItem(url)
+		dataX.__currentTag=item
 	})
 	// function getFileLanguage(name){
 	// 	//根据文件名解析文件语言

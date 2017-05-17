@@ -5,9 +5,43 @@ const datax = require('./datax')
 const TitleItem = require('../bean/TitleItem')
 const fm=require('./filemanager')
 const config=require('../config')
+const Server=require('./httpUtil')
 
 let file = {
     currentFile: undefined,
+
+    createServer(){
+        dialog.showOpenDialog({
+            title: '请选择服务器的根路径',
+            buttonLabel: 'Open',
+            properties: ['openDirectory','createDirectory']
+            // filters: [{ name: 'Text', extensions: ['txt', 'md'] }]
+        }, function(filesIn) {
+            if (filesIn === undefined) return
+            if (Server.__server) {
+                Server.__server.server.close()
+                Server.__server=null
+            }
+            Server.createServer(filesIn[0],3333)
+            // alert('服务器启动成功')
+        })
+    },
+
+    createAutoRefreshServer(){
+        dialog.showOpenDialog({
+            title: '请选择服务器的根路径',
+            buttonLabel: 'Open',
+            properties: ['openDirectory','createDirectory']
+        }, function(filesIn) {
+            if (filesIn === undefined) return
+            if (Server.__server) {
+                Server.__server.server.close()
+                Server.__server=null
+            }
+            Server.createAutoRefreshServer(filesIn[0],8080)
+            // alert('服务器启动成功')
+        })
+    },
 
     open() {
         dialog.showOpenDialog({

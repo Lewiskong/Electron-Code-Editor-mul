@@ -163,7 +163,7 @@ function setCurrentTag(oldTag,newTag,data){
 		data.__currentLang='null'
 		return 
 	}
-
+ 
 	if (typeof newTag!=='object' || newTag.constructor!=TitleItem) {
 		throw new Error(`wrong parameter ${newTag}`)
 	}
