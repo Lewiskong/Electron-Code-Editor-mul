@@ -19,6 +19,7 @@ class Server{
 	static createAutoRefreshServer(filePath,port){
 		// createBaseServer(filePath,port)
 		Server.exec(`cd ${filePath} && webpack-dev-server`)
+		Server.open(`http://localhost:8080/index.html`)
 	}
 
 
